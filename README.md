@@ -469,8 +469,8 @@
       - Buat file berupa log'i'.log. Karena i diincrement, maka nantinya index dari file tersebut akan bertambah.
       - Set sleep(60), artinya program akan berjalan tiap menit. Nantinya pada saat i = 30 atau 30 menit maka akan membuat direktori lagi pada /home/becak/log.
       
-       ![soal5](/images/screenshot5_a_1.png)
-       ![soal5](/images/screenshot5_a_2.png)
+       ![soal5](/images/soal5_a_1.png)
+       ![soal5](/images/soal5_a_2.png)
    
    b. Berikut adalah source codenya
    
