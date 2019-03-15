@@ -501,3 +501,6 @@
    - pada soal5a terdapat syntax yang menyimpan pidnya di file pid_nomor5.txt.
    - lalu dibaca oleh program 5b dan kill
    ![soal5](/images/soal5_b.png)
+
+
+# Terima Kasih :)
