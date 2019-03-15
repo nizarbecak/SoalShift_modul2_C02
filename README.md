@@ -376,6 +376,6 @@
            i++;
          }
          ```
-       - Setting program agar berjalan tiap 5 detik menggunakan 'sleep(5);'
+       - Setting program agar berjalan tiap 5 detik menggunakan `sleep(5);`.
        - Output:
        ![soal4](/images/soal4.png)
