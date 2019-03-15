@@ -41,69 +41,69 @@
       #include <syslog.h>
       #include <string.h>
       #include <dirent.h>
-      
+
       int main() {
         pid_t pid, sid;
-	
-	pid = fork();
 
-	if (pid < 0) {
-	  exit(EXIT_FAILURE);
-	}
+        pid = fork();
 
-	if (pid > 0) {
-	  exit(EXIT_SUCCESS);
-	}
+        if (pid < 0) {
+          exit(EXIT_FAILURE);
+        }
 
-	umask(0);
+        if (pid > 0) {
+          exit(EXIT_SUCCESS);
+        }
 
-	sid = setsid();
+        umask(0);
 
-	if (sid < 0) {
-	  exit(EXIT_FAILURE);
-	}
+        sid = setsid();
 
-	if ((chdir("/home/syauqi/modul2/")) < 0) {
-	  exit(EXIT_FAILURE);
-	}
+        if (sid < 0) {
+          exit(EXIT_FAILURE);
+        }
 
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
+        if ((chdir("/home/syauqi/modul2/")) < 0) {
+          exit(EXIT_FAILURE);
+        }
 
-	while(1) {
-	  struct dirent *de;
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
 
-	  DIR *dr = opendir(".");
+        while(1) {
+          struct dirent *de;
 
-	  if (dr == NULL)
-	  {
-	    printf("Could not open current directory" );
-	    return 0;
-	  }
+          DIR *dr = opendir(".");
 
-	  while ((de = readdir(dr)) != NULL)
-	  {
-	    char stre[256];
-	    char newpath[256];
-	    int i=0;
-	    snprintf(stre, 256, "%s", de->d_name);
-	    if(strstr(stre, ".png"))
-	    {
-              for(i=0; i < sizeof(de->d_name); i++)
-	      if(stre[i]=='.') break;
-	      
-	      stre[i]='\0';
-	      snprintf(newpath, 256, "gambar/%s_grey.png", stre);
-	      rename(de->d_name, newpath);
-	    }
-	  }
+          if (dr == NULL)
+          {
+              printf("Could not open current directory" );
+              return 0;
+          }
 
-	  closedir(dr);
-	  sleep(30);
-	}
+          while ((de = readdir(dr)) != NULL)
+          {
+            char stre[256];
+            char newpath[256];
+            int i=0;
+            snprintf(stre, 256, "%s", de->d_name);
+            if(strstr(stre, ".png"))
+            {
+        for(i=0; i < sizeof(de->d_name); i++)
+          if(stre[i]=='.') break;
 
-	exit(EXIT_SUCCESS);
+        stre[i]='\0';
+        snprintf(newpath, 256, "gambar/%s_grey.png", stre);
+        rename(de->d_name, newpath);
+            }
+          }
+
+          closedir(dr);
+          sleep(30);
+        }
+
+        exit(EXIT_SUCCESS);
       }
       ```
       - Di sini kami menggunakan process daemon agar processnya terus berjalan setiap 30 detik.
