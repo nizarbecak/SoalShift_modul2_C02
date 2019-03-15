@@ -27,3 +27,244 @@
           
       b. Buatlah program c untuk menghentikan program di atas. <br>
       NB: Dilarang menggunakan crontab dan tidak memakai argumen ketika menjalankan program.
+
+## Jawaban
+   1. Berikut adalah source code nya.
+      ```
+      #include <sys/types.h>
+      #include <sys/stat.h>
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <fcntl.h>
+      #include <errno.h>
+      #include <unistd.h>
+      #include <syslog.h>
+      #include <string.h>
+      #include <dirent.h>
+
+      int main() {
+        pid_t pid, sid;
+
+        pid = fork();
+
+        if (pid < 0) {
+          exit(EXIT_FAILURE);
+        }
+
+        if (pid > 0) {
+          exit(EXIT_SUCCESS);
+        }
+
+        umask(0);
+
+        sid = setsid();
+
+        if (sid < 0) {
+          exit(EXIT_FAILURE);
+        }
+
+        if ((chdir("/home/syauqi/modul2/")) < 0) {
+          exit(EXIT_FAILURE);
+        }
+
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
+
+        while(1) {
+          struct dirent *de;
+
+          DIR *dr = opendir(".");
+
+          if (dr == NULL)
+          {
+            printf("Could not open current directory" );
+            return 0;
+          }
+
+          while ((de = readdir(dr)) != NULL)
+          {
+            if(strstr(de->d_name, ".png"))
+            { 
+	           int len = strlen(de->d_name)-4;
+	           char newname[len+9];
+	           strncpy(newname,de->d_name,len-1);
+	           newname[len-1]='\0';
+	           strcat(newname, "_grey.png");
+	           char newpath[100]="/home/syauqi/modul2/gambar/";
+	           strcat(newpath, newname);
+	           printf("%s\n", newpath);
+	           rename(de->d_name, newpath);
+            }
+          }
+
+          closedir(dr);
+          sleep(30);
+        }
+  
+        exit(EXIT_SUCCESS);
+      }
+      ```
+      - Di sini kami menggunakan process daemon agar processnya terus berjalan setiap 30 detik.
+      - Kami memakai library dirent.h agar dapat menggunakan data type struct dirent dan fungsi readdir().
+      - Struct dirent nanti akan menyimpan nama file yang ada di folder yang telah ditentukan.
+      - Dalam looping, setiap nama file yang mengandung ".png" akan diproses.
+      - Pertama panjang dari nama file akan disimpan dalam variabel len, lalu dikurangi 4 untuk proses penghilangan ".png"nya
+      - Lalu membuat variabel string dengan panjang len+9 karena "_grey.png" panjangnya 9.
+      - Lalu nama file tadi di copy ke variabel newname dan ditambahkan _grey.png
+      - Lalu dibuat variabel path untuk folder penyimpanan file yang akan dipindah
+      - Lalu dengan fungsi rename untuk memindahkan filenya
+      
+   2. Berikut adalah source codenya.
+      ```
+      #include <sys/types.h>
+      #include <sys/stat.h>
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <fcntl.h>
+      #include <errno.h>
+      #include <unistd.h>
+      #include <syslog.h>
+      #include <string.h>
+      #include <errno.h>
+      #include <pwd.h>
+      #include <grp.h>
+
+      #define die(e) do { fprintf(stderr, "%s\n", e); exit(EXIT_FAILURE); } while (0);
+
+      int main(int argc, char **argv) {
+        pid_t pid, sid;
+
+        pid = fork();
+
+        if (pid < 0) {
+          exit(EXIT_FAILURE);
+        }
+
+        if (pid > 0) {
+          exit(EXIT_SUCCESS);
+        }
+
+        umask(0);
+
+        sid = setsid();
+
+        if (sid < 0) {
+          exit(EXIT_FAILURE);
+        }
+
+        if ((chdir("/home/syauqi/modul2/hatiku/")) < 0) {
+          exit(EXIT_FAILURE);
+        }
+
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
+
+        while(1) {
+          char mode[] = "0777";
+          char buf[100] = "elen.ku";
+          int i;
+          i = strtol(mode, 0, 8);
+          chmod (buf,i);
+
+          struct stat info;
+          stat(buf, &info);
+          struct passwd *pw = getpwuid(info.st_uid);
+          struct group *gr = getgrgid(info.st_gid);
+
+          if(strcmp(pw->pw_name, "www-data")==0 && strcmp(gr->gr_name, "www-data")==0){
+            int status;
+            status = remove(buf);
+          }
+
+          sleep(3);
+        }
+
+        exit(EXIT_SUCCESS);
+      }
+      ```
+      - Di sini kami menggunakan process daemon agar processnya terus berjalan dan diatur setiap 3 detik.
+      - Pada prosesnya perta-tama kami mengubah permissions dari file dengan menggunakan chmod.
+      - Kemudian mendeclare variabel struct stat yang berisi info dari file.
+      - Lalu menggunakan function getweuid() dan getgrgid() untuk mendapatkan owner dan group dari file.
+      - Kemudian di cek apakah owner dan group dari file tersebut adalah www-data atau bukan. Jika iya maka file akan dihapus.
+    
+   3. Berikut adalah source codenya.
+      ```
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <unistd.h>
+      #include <sys/wait.h>
+
+      #define die(e) do { fprintf(stderr, "%s\n", e); exit(EXIT_FAILURE); } while (0);
+
+      int main() {
+        int link[2];
+        pid_t pid;
+        char foo[4096];
+        int status;
+        int link2[2];
+        if (pipe(link2)==-1)
+          die("pipe");
+
+        if (pipe(link)==-1)
+          die("pipe");
+
+        if ((pid = fork()) == -1)
+          die("fork");
+
+        if(pid == 0) {
+
+          execl("/usr/bin/unzip", "unzip", "/home/syauqi/modul2/campur2.zip", (char *)0);
+          die("execl");
+
+        } else {
+          while((wait(&status))>0);
+          int statu;
+
+          if ((pid = fork()) == -1)
+          die("fork");
+
+          if (pid == 0) {
+            dup2 (link[1], STDOUT_FILENO);
+            close(link[0]);
+            close(link[1]);
+            execl("/bin/ls", "ls", "/home/syauqi/modul2/campur2/", (char *)0);
+            die("execl");
+          }
+
+          else {
+            if ((pid = fork()) == -1)
+              die("fork");
+
+            if (pid == 0) {
+              dup2 (link[0], STDIN_FILENO);
+              dup2 (link2[1], STDOUT_FILENO);
+              close(link[1]);
+              close(link[0]);
+         close(link2[1]);
+              close(link2[0]);
+              execl("/bin/grep", "grep", ".txt$", (char *)0);
+              die("execl");
+            }
+
+            else{
+              FILE *f = fopen("daftar.txt", "w");
+              close(link2[1]);
+         close(link[1]);
+         close(link[0]);
+              int nbytes = read(link2[0], foo, sizeof(foo));
+              fprintf(f, "%.*s\n", nbytes, foo);
+              fclose(f);
+            }
+          }
+        }
+        return 0;
+      }
+      ```
+      - Disini kami menggunakan 2 pipe dan 3 child process.
+      - Process pertama berfungsi untup melakukan unzip file.
+      - Process kedua melakukan exec untuk menjalankan perintah ls, yang nanti outputnya disimpan dalam pipe pertama (link). Fungsi ls disini untuk mendapatkan nama-nama file dari hasil unzip sebelumnya.
+      - Process ketiga melakukan exec untuk menjalankan perintah grep, yang mendapatkan input dari pipe pertama (link) dan outputnya nanti akan disimpan dalam pipe kedua (link2). Fungsi grep disini untuk mensortir file yang memiliki ekstensi .txt.
+      - Process keempat melakukan print ke dalam file, yang mendapatkan input dari pipe kedua (link2).
