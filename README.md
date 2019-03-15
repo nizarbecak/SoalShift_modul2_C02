@@ -381,7 +381,7 @@
        ![soal4](/images/soal4.png)
        
    5. Berikut adalah source codenya.
-      ```c
+      ```
       #include <sys/types.h>
       #include <sys/stat.h>
       #include <stdio.h>
@@ -393,17 +393,7 @@
       #include <string.h>
       #include <time.h>
 
-      static time_t getFileAccessedTime(const char *path)
-      {
-          struct stat attr;
-          if (stat(path, &attr) == 0)
-          {
-              return attr.st_atime;
-          }
-          return 0;
-      }
-
-      int i = 1;
+      int i = 30;
 
       int main() {
         pid_t pid, sid;
@@ -445,7 +435,7 @@
           if (i == 30){
               struct tm *timenow;
               time_t now = time(NULL);
-              timenow = gmtime(&now);
+              timenow = localtime(&now);
               strftime(directory, sizeof(directory), "/home/becak/log/%d:%m:%Y-%H:%M", timenow);
               mkdir(directory, ACCESSPERMS);
               i = 0;
@@ -465,16 +455,22 @@
           i++;
 
 
-          sleep(5);
+          sleep(60);
         }
 
         exit(EXIT_SUCCESS);
       }
       ```
 
-      - Masih error di setting waktunya:
-        ![soal5](/images/screenshot5_1.png)
-        ![soal5](/images/screenshot5_2.png)
+      - Deklarasi variabel global i = 30, nantinya variabel i ini berguna untuk pembuatan direktori dan penamaan index file.
+      - Pada pertama kali eksekusi maka program akan membuat direktori dalam /home/becak/log karena i = 30.
+      - Penamaan direktori berdasarkan waktu sistem dengan format "dd:mm:YYYY-HH:MM" memanfaatkan library `time.h`.
+      - Setelah direktori dibuat maka set i = 0 agar nantinya digunakan untuk penamaan index file log.
+      - Buat file berupa log'i'.log. Karena i diincrement, maka nantinya index dari file tersebut akan bertambah.
+      - Set sleep(60), artinya program akan berjalan tiap menit. Nantinya pada saat i = 30 atau 30 menit maka akan membuat direktori lagi pada /home/becak/log.
+      
+       ![soal5](/images/screenshot5_a_1.png)
+       ![soal5](/images/screenshot5_a_2.png)
    
    b. Berikut adalah source codenya
    
@@ -487,7 +483,7 @@
       int main()
       {
         FILE *pidnya;
-        pidnya = fopen("/home/syauqi/modul2/pid_nomor5.txt", "r");
+        pidnya = fopen("/home/becak/modul2/pid_nomor5.txt", "r");
         int pid_kill;
         
         fscanf(pidnya, "%d", &pid_kill);
