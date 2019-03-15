@@ -24,5 +24,6 @@
         - Per 30 menit membuat folder /[dd:MM:yyyy-hh:mm]
         - Per menit memasukkan log#.log ke dalam folder tersebut<br>
           ‘#’ : increment per menit. Mulai dari 1<br>
+          
       b. Buatlah program c untuk menghentikan program di atas. <br>
       NB: Dilarang menggunakan crontab dan tidak memakai argumen ketika menjalankan program.
