@@ -474,5 +474,5 @@ int main() {
    ```
 
    - Masih error di setting waktunya:
-   ![soal5](/images/screenshot4_1.png)
-   ![soal5](/images/screenshot4_2.png)
+   ![soal5](/images/screenshot5_1.png)
+   ![soal5](/images/screenshot5_2.png)
