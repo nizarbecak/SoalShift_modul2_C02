@@ -472,9 +472,9 @@
       }
       ```
 
-   - Masih error di setting waktunya:
-   ![soal5](/images/screenshot5_1.png)
-   ![soal5](/images/screenshot5_2.png)
+      - Masih error di setting waktunya:
+        ![soal5](/images/screenshot5_1.png)
+        ![soal5](/images/screenshot5_2.png)
    
    b. Berikut adalah source codenya
    
@@ -497,3 +497,7 @@
         fclose(pidnya);
         return 0;
       }
+      ```
+   - pada soal5a terdapat syntax yang menyimpan pidnya di file pid_nomor5.txt.
+   - lalu dibaca oleh program 5b dan kill
+   ![soal5](/images/soal5b.png)
