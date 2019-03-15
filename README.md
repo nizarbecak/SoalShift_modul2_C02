@@ -275,3 +275,106 @@
       - Process keempat melakukan print ke dalam file, yang mendapatkan input dari pipe kedua (link2).
       
       ![soal3](/images/soal3.png)
+   
+   4. Berikut adalah source codenya.
+      ```
+      #include <sys/types.h>
+      #include <sys/stat.h>
+      #include <stdio.h>
+      #include <stdlib.h>
+      #include <fcntl.h>
+      #include <errno.h>
+      #include <unistd.h>
+      #include <syslog.h>
+      #include <string.h>
+      #include <time.h>
+
+      static time_t getFileAccessedTime(const char *path)
+      {
+         struct stat attr;
+         if (stat(path, &attr) == 0)
+         {
+            return attr.st_atime;
+         }
+         return 0;
+      }
+
+      int i = 1;
+
+      int main() {
+      pid_t pid, sid;
+
+      pid = fork();
+
+      if (pid < 0) {
+         exit(EXIT_FAILURE);
+      }
+
+      if (pid > 0) {
+         exit(EXIT_SUCCESS);
+      }
+
+      umask(0);
+
+      sid = setsid();
+
+      if (sid < 0) {
+         exit(EXIT_FAILURE);
+      }
+
+      if ((chdir("/")) < 0) {
+         exit(EXIT_FAILURE);
+      }
+
+      close(STDIN_FILENO);
+      close(STDOUT_FILENO);
+      close(STDERR_FILENO);
+
+      while(1) {
+         time_t t1 = getFileAccessedTime("/home/becak/Documents/makanan/makan_enak.txt");
+         time_t t2 = time(NULL);
+         char filename [FILENAME_MAX];
+
+         if (t2 - t1 <= 30) {
+            sprintf(filename, "/home/becak/Documents/makanan/makan_sehat%d.txt", i);
+            FILE *new_file;
+            new_file = fopen(filename,"w");
+            fclose(new_file);
+           i++;
+         }
+
+      sleep(5);
+      }
+
+      exit(EXIT_SUCCESS);
+      }
+      ```
+      - Untuk mengetahui waktu terkahir kali file dibuka maka dibuat sebuah fungsi yang memanfaatkan library `time.h` menggunakan fungsi `st_atime`.
+         ```
+         static time_t getFileAccessedTime(const char *path)
+         {
+            struct stat attr;
+            if (stat(path, &attr) == 0)
+            {
+               return attr.st_atime;
+            }
+            return 0;
+         }
+         ```
+      - Setelah diketahui maka waktu sistem kita kurangi dengan waktu akses terakhir kali file tersebut, apabila selisih tersebut kurang dari sama dengan 30 detik maka kita buat makan_sehat#.txt dengan mengincrement index file tersebut.
+         ```
+         while(1) {
+         time_t t1 = getFileAccessedTime("/home/becak/Documents/makanan/makan_enak.txt");
+         time_t t2 = time(NULL);
+         char filename [FILENAME_MAX];
+
+         if (t2 - t1 <= 30) {
+            sprintf(filename, "/home/becak/Documents/makanan/makan_sehat%d.txt", i);
+            FILE *new_file;
+            new_file = fopen(filename,"w");
+            fclose(new_file);
+           i++;
+         }
+         ```
+       - Setting program agar berjalan tiap 5 detik menggunakan 'sleep(5);'
+       - Output:
