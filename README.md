@@ -11,3 +11,18 @@
       - Gunakan minimal 3 proses yang diakhiri dengan exec.
       - Gunakan pipe
       - Pastikan file daftar.txt dapat diakses dari text editor
+   4. Dalam direktori /home/[user]/Documents/makanan terdapat file makan_enak.txt yang berisikan daftar makanan terkenal di Surabaya. Elen sedang melakukan diet dan seringkali tergiur untuk membaca isi makan_enak.txt karena ngidam makanan enak. Sebagai teman yang baik, Anda membantu Elen dengan membuat program C yang berjalan setiap 5 detik untuk memeriksa apakah file makan_enak.txt pernah dibuka setidaknya 30 detik yang lalu (rentang 0 - 30 detik). <br> Jika file itu pernah dibuka, program Anda akan membuat 1 file makan_sehat#.txt di direktori /home/[user]/Documents/makanan dengan '#' berisi bilangan bulat dari 1 sampai tak hingga untuk mengingatkan Elen agar berdiet. <br>
+      Contoh: <br>
+      File makan_enak.txt terakhir dibuka pada detik ke-1<br>
+      Pada detik ke-10 terdapat file makan_sehat1.txt dan makan_sehat2.txt<br>
+      Catatan: 
+      - dilarang menggunakan crontab
+      - Contoh nama file : makan_sehat1.txt, makan_sehat2.txt, dst
+   5. Kerjakan poin a dan b di bawah:<br>
+      a. Buatlah program c untuk mencatat log setiap menit dari file log pada syslog ke /home/[user]/log/[dd:MM:yyyy-hh:mm]/log#.log<br>
+      Ket:
+        - Per 30 menit membuat folder /[dd:MM:yyyy-hh:mm]
+        - Per menit memasukkan log#.log ke dalam folder tersebut<br>
+          ‘#’ : increment per menit. Mulai dari 1
+      b. Buatlah program c untuk menghentikan program di atas. <br>
+      NB: Dilarang menggunakan crontab dan tidak memakai argumen ketika menjalankan program.
