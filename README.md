@@ -116,6 +116,8 @@
       - Lalu dibuat variabel path untuk folder penyimpanan file yang akan dipindah
       - Lalu dengan fungsi rename untuk memindahkan filenya
       
+      ![soal1](/images/soal1.png)
+      
    2. Berikut adalah source codenya.
       ```
       #include <sys/types.h>
@@ -190,6 +192,8 @@
       - Kemudian mendeclare variabel struct stat yang berisi info dari file.
       - Lalu menggunakan function getweuid() dan getgrgid() untuk mendapatkan owner dan group dari file.
       - Kemudian di cek apakah owner dan group dari file tersebut adalah www-data atau bukan. Jika iya maka file akan dihapus.
+      
+      ![soal2](/images/soal2.png)
     
    3. Berikut adalah source codenya.
       ```
@@ -269,3 +273,5 @@
       - Process kedua melakukan exec untuk menjalankan perintah ls, yang nanti outputnya disimpan dalam pipe pertama (link). Fungsi ls disini untuk mendapatkan nama-nama file dari hasil unzip sebelumnya.
       - Process ketiga melakukan exec untuk menjalankan perintah grep, yang mendapatkan input dari pipe pertama (link) dan outputnya nanti akan disimpan dalam pipe kedua (link2). Fungsi grep disini untuk mensortir file yang memiliki ekstensi .txt.
       - Process keempat melakukan print ke dalam file, yang mendapatkan input dari pipe kedua (link2).
+      
+      ![soal3](/images/soal3.png)
