@@ -397,6 +397,7 @@
 
       int main() {
         pid_t pid, sid;
+        FILE *pid_txt;
 
         pid = fork();
 
@@ -405,6 +406,9 @@
         }
 
         if (pid > 0) {
+          pid_txt = fopen("/home/becak/modul2/pid_nomor5.txt","w");
+          fprintf(pid_txt, "%d", pid);
+          fclose(pid_txt);
           exit(EXIT_SUCCESS);
         }
 
@@ -488,7 +492,7 @@
         
         fscanf(pidnya, "%d", &pid_kill);
         
-        kill(pid_kill, SIGSTOP);
+        kill(pid_kill, SIGKILL);
         
         fclose(pidnya);
         return 0;
@@ -496,4 +500,4 @@
       ```
    - pada soal5a terdapat syntax yang menyimpan pidnya di file pid_nomor5.txt.
    - lalu dibaca oleh program 5b dan kill
-   ![soal5](/images/soal5b.png)
+   ![soal5](/images/soal5_b.png)
