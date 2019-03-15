@@ -476,3 +476,26 @@ int main() {
    - Masih error di setting waktunya:
    ![soal5](/images/screenshot5_1.png)
    ![soal5](/images/screenshot5_2.png)
+   
+   b. Berikut adalah source codenya.
+      ```
+      #include <stdio.h>
+      #include <unistd.h>
+      #include <sys/types.h>
+      #include <signal.h>
+
+      int main()
+      {
+        FILE *pidnya;
+        pidnya = fopen("/home/syauqi/modul2/pid_nomor5.txt", "r");
+        int pid_kill;
+
+        fscanf(pidnya, "%d", &pid_kill);
+
+        kill(pid_kill, SIGSTOP);
+
+        fclose(pidnya);
+        return 0;
+      }
+      ```
+      
