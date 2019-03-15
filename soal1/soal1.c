@@ -51,16 +51,17 @@ int main() {
 
     while ((de = readdir(dr)) != NULL)
     {
-      if(strstr(de->d_name, ".png"))
+      char stre[256];
+      char newpath[256];
+      int i=0;
+      snprintf(stre, 256, "%s", de->d_name);
+      if(strstr(stre, ".png"))
       {
-	int len = strlen(de->d_name)-4;
-	char newname[len+9];
-	strncpy(newname,de->d_name,len-1);
-	newname[len-1]='\0';
-	strcat(newname, "_grey.png");
-	char newpath[100]="/home/syauqi/modul2/gambar/";
-	strcat(newpath, newname);
-	printf("%s\n", newpath);
+	for(i=0; i < sizeof(de->d_name); i++)
+	  if(stre[i]=='.') break;
+
+	stre[i]='\0';
+	snprintf(newpath, 256, "gambar/%s_grey.png", stre);
 	rename(de->d_name, newpath);
       }
     }
